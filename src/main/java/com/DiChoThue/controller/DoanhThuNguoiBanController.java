@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.DiChoThue.model.DoanhThuNguoiBan;
 import com.DiChoThue.repository.DoanhThuNguoiBanRepository;
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://localhost:8080") 
 @RequestMapping("/api")
 public class DoanhThuNguoiBanController {
 	@Autowired
