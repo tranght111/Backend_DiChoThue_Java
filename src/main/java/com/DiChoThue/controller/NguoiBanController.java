@@ -23,7 +23,7 @@ public class NguoiBanController {
 	
 	@GetMapping("/nguoiban")
 	
-public ResponseEntity<List<NguoiBan>> getAllNguoiBan() {
+	public ResponseEntity<List<NguoiBan>> getAllNguoiBan() {
 		
 		try {
 			List<NguoiBan> NguoiBans = new ArrayList<NguoiBan>();
