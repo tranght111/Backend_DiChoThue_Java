@@ -40,12 +40,9 @@ public class PhiHoaHongNguoiBanController {
 			for(NguoiBan i: ngbanList) {
 				nguoiBanIds.add(i.getNguoiBanId());			
 			}
-			// khi code bỏ 2 dòng này chỉ add demo
 			
 			for (int id: nguoiBanIds) {
-				// KHông cần nguoiBanId ở query vì mình fetch all mà
 				float phiHoaHong = PhiHoaHongNguoiBanRepository.calcCommissionByMonthAndYear(thang, nam, id);
-				// trả tạm vào Object PhiHoaHongNguoiBan nêu không muốn custom json
 				PhiHoaHongNguoiBan phiHoaHongNguoiBan = new PhiHoaHongNguoiBan();
 				phiHoaHongNguoiBan.thang = thang;
 				phiHoaHongNguoiBan.nam = nam;

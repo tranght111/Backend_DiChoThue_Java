@@ -13,25 +13,41 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.DiChoThue.model.DoanhThuNguoiBan;
+import com.DiChoThue.model.NguoiBan;
 import com.DiChoThue.repository.DoanhThuNguoiBanRepository;
+import com.DiChoThue.repository.NguoiBanRepository;
 @RestController
 @CrossOrigin(origins = "http://localhost:8080") 
 @RequestMapping("/api")
 public class DoanhThuNguoiBanController {
 	@Autowired
+	NguoiBanRepository nguoiBanRepository;
+	
+	@Autowired
 	DoanhThuNguoiBanRepository DoanhThuNguoiBanRepository;
 
 	@GetMapping("/doanhthu")
-	public ResponseEntity<List<DoanhThuNguoiBan>> getAllDoanhThu(@RequestParam(required = false) Integer thang, @RequestParam(required = false) Integer nam) {
-		
+	public ResponseEntity<List<DoanhThuNguoiBan>> calcRevenueByMonthAndYear(@RequestParam(required = false) Integer thang, @RequestParam(required = false) Integer nam) {
 		try {
 			List<DoanhThuNguoiBan> DoanhThus = new ArrayList<DoanhThuNguoiBan>();
-
-			if (thang == null && nam == null)
-				DoanhThuNguoiBanRepository.findAll().forEach(DoanhThus::add);
-		
-			else
-				DoanhThuNguoiBanRepository.findByThangAndNam(thang, nam).forEach(DoanhThus::add);
+			
+			// B1: Fetch ds id
+			List<Integer> nguoiBanIds = new ArrayList<Integer>();
+			List<NguoiBan> ngbanList = new ArrayList<NguoiBan>();
+			ngbanList = nguoiBanRepository.findAll();
+			for(NguoiBan i: ngbanList) {
+				nguoiBanIds.add(i.getNguoiBanId());			
+			}
+			
+			for (int id: nguoiBanIds) {
+				float doanhThu = DoanhThuNguoiBanRepository.calcRevenueByMonthAndYear(thang, nam, id);
+				DoanhThuNguoiBan doanhthuNguoiBan = new DoanhThuNguoiBan();
+				doanhthuNguoiBan.thang = thang;
+				doanhthuNguoiBan.nam = nam;
+				doanhthuNguoiBan.nguoiBanId = id;
+				doanhthuNguoiBan.doanhThu = doanhThu;		
+				DoanhThus.add(doanhthuNguoiBan);
+			}
 
 			if (DoanhThus.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -39,6 +55,7 @@ public class DoanhThuNguoiBanController {
 
 			return new ResponseEntity<>(DoanhThus, HttpStatus.OK);
 		} catch (Exception e) {
+			System.out.print(e);
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

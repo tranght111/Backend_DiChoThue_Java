@@ -18,6 +18,7 @@ import java.util.Optional;
 @RequestMapping(path = "/api/sanPham")
 @AllArgsConstructor
 public class SanPhamController {
+	// Thêm autowired vào hui cục danghf
 	@Autowired
     SanPhamRepository sanPhamRepository;
 
